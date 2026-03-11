@@ -1,54 +1,161 @@
-.app {
-  text-align: center;
+/* ===========================
+   App.css — სრული, გამართული სტილი
+   (მარცხნივ პრიზები, შუაში კონტენტი, მარჯვნივ ისტორია)
+   =========================== */
+
+/* Global reset and remove global scrollbars */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background: #121212;
-  color: white;
-  min-height: 100vh;
-  padding: 40px 20px;
-  font-family: sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #fff;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 }
 
-.box-icon {
-  font-size: 80px;
-  margin: 30px 0;
-  transition: transform 0.3s;
+/* Frame and app */
+.page-frame {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.app {
+  height: 100%;
+  width: 100%;
+  max-width: 1400px;
+  padding: 20px;
+  background: #0f0f0f;
+  border: 8px solid #1b1b1b;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.shaking {
-  animation: shake 0.2s infinite;
+/* Header */
+header { flex: 0 0 auto; display:flex; align-items:center; }
+h1 { margin:0; font-size:22px; }
+
+/* Main layout: default mobile single column */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  flex: 1 1 auto;
+  align-items: start;
+  overflow: auto; /* რომ მობილურზე სქროლვა შეიძლებოდეს */
 }
 
-@keyframes shake {
-  0% { transform: translate(2px, 2px) rotate(0deg); }
-  50% { transform: translate(-2px, -2px) rotate(-2deg); }
-  100% { transform: translate(2px, 2px) rotate(0deg); }
-}
+/* Left prizes sidebar */
+.prizes-sidebar { width:100%; box-sizing:border-box; z-index:5; }
+.prizes-preview { margin:0; text-align:center; }
+.prizes-preview p { color:#aaa; margin:8px 0; font-weight: bold; }
+.prizes-badges { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; }
+.prize-badge { background:#2a2a2a; border:1px solid #333; padding:8px 14px; border-radius:18px; font-weight:600; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
 
-.spin-btn {
-  padding: 15px 40px;
+/* Center content */
+.content-area { display:flex; flex-direction:column; align-items:center; gap:20px; overflow:visible; padding:8px 0; }
+
+.spin-btn { 
+  padding:15px 40px; 
   font-size: 18px;
-  background: #ff4757;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+  font-weight:700; 
+  background:#ff4757; 
+  color:#fff; 
+  border:none; 
+  border-radius:999px; 
+  cursor:pointer; 
+  box-shadow:0 6px 18px rgba(255,71,87,0.4); 
+  transition: transform 0.1s, background 0.3s;
 }
+.spin-btn:active { transform: scale(0.95); }
+.spin-btn:disabled { background:#555; cursor:not-allowed; box-shadow:none; }
+.result-text { min-height:36px; text-align:center; color: #ffcc00; margin: 0; }
 
-.spin-btn:disabled { background: #555; }
+/* Right history sidebar (mobile: below content) */
+.history-sidebar { width:100%; box-sizing:border-box; }
+.history-section { margin:0; }
+.history-section h3 { margin:8px 0 15px 0; color:#ddd; text-align: center; }
 
+/* Only history-list scrolls */
 .history-list {
-  max-width: 400px;
-  margin: 20px auto;
   height: 250px;
-  overflow-y: scroll;
-  background: #1e1e1e;
-  border-radius: 15px;
-  padding: 15px;
-  border: 1px solid #333;
+  overflow-y: auto;
+  background:#1e1e1e;
+  border-radius:12px;
+  padding:12px;
+  border:1px solid #2b2b2b;
+}
+.history-list::-webkit-scrollbar { width:8px; }
+.history-list::-webkit-scrollbar-thumb { background:#444; border-radius:8px; }
+.history-item { padding:10px 6px; border-bottom:1px solid #262626; color:#eee; font-size:14px; }
+.history-item:last-child { border-bottom:none; }
+.history-item strong { color: #ffcc00; margin-left: 5px; }
+
+/* Tablet and up: three columns (left prizes, center content, right history) */
+@media (min-width: 768px) {
+  .main-layout {
+    grid-template-columns: 280px 1fr 320px;
+    gap: 20px;
+    overflow: hidden; /* კომპიუტერზე სქროლი არ გვინდა მთავარ ფანჯარაში */
+  }
+
+  .prizes-sidebar {
+    grid-column: 1 / 2;
+    position: sticky;
+    top: 28px;
+    height: calc(100% - 56px);
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .content-area {
+    grid-column: 2 / 3;
+    align-items: center;
+    justify-content: center;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .history-sidebar {
+    grid-column: 3 / 4;
+    position: sticky;
+    top: 28px;
+    height: calc(100% - 56px);
+    padding-left: 8px;
+  }
+
+  /* Make prizes vertical */
+  .prizes-badges { flex-direction:column; gap:12px; align-items:stretch; }
+  .prize-badge { width:100%; text-align:left; padding:10px 14px; border-radius:10px; }
+
+  /* Ensure history-list fits inside right column */
+  .history-list { height: calc(100% - 48px); } /* leaves space for heading */
 }
 
-.history-item {
-  padding: 8px;
-  border-bottom: 1px solid #2a2a2a;
-  text-align: left;
+/* Desktop wide screens */
+@media (min-width: 1024px) {
+  .app { padding:28px; border-width:10px; max-width:1400px; }
 }
+
+/* Mobile tweaks */
+@media (max-width: 767px) {
+  .app { padding:16px; border-width:6px; border-radius:10px; }
+  .history-list { height:200px; }
+}
+
+/* Accessibility focus */
+.spin-btn:focus { outline:3px solid rgba(255,71,87,0.18); outline-offset:3px; }
+
+/* Ensure inner elements don't overflow the frame */
+.app * { max-width:100%; box-sizing:border-box; }
